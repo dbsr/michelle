@@ -2,10 +2,6 @@
 
 Michelle (my shell) is a collection of shell functions.
 
-## REQUIREMENTS
-
-- coreutils (`$ brew install coreutils`)
-
 ## INSTALL
 
 Clone this repository and source init.zsh from your `~/.zshrc`
