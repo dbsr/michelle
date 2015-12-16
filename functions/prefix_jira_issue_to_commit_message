@@ -1,0 +1,19 @@
+#!/bin/zsh
+
+get_branch_name() {
+    git symbolic-ref --short -q HEAD
+}
+
+get_jira_issue() {
+    local branch_name=`get_branch_name`
+    [[ $branch_name =~ '[a-z]*\/([A-Z]+-[0-9]+)' ]] && echo $match[1]
+}
+
+
+main() {
+    local jira_issue=`get_jira_issue`
+    local commit="$jira_issue - $1"
+    git commit -m "$commit"
+}
+
+main $@
