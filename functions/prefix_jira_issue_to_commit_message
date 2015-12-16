@@ -12,7 +12,12 @@ get_jira_issue() {
 
 main() {
     local jira_issue=`get_jira_issue`
-    local commit="$jira_issue - $1"
+    local prefix=''
+
+    [[ -n $jira_issue ]] && prefix="$jira_issue - "
+
+    local commit="${prefix}$1"
+
     git commit -m "$commit"
 }
 
