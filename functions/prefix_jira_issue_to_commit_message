@@ -11,14 +11,12 @@ get_jira_issue() {
 
 
 main() {
+    local message="$1"
     local jira_issue=`get_jira_issue`
-    local prefix=''
 
-    [[ -n $jira_issue ]] && prefix="$jira_issue - "
+    [[ -n $jira_issue ]] && message="$jira_issue - $message"
 
-    local commit="${prefix}$1"
-
-    git commit -m "$commit"
+    git commit -m "$message"
 }
 
-main $@
+main "$1"
