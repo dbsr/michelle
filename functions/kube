@@ -1,0 +1,38 @@
+#!/bin/zsh
+
+NAMESPACE_NAME=$1
+COMMAND=$2
+POD_NAME=$3
+OPTS="$@[4, -1]"
+
+
+NAMESPACE=$(kubectl get namespaces|grep $NAMESPACE_NAME|awk '{print $1}'| head -1)
+
+if [[ -n $POD_NAME ]]
+then
+  POD=$(kubectl get pods --namespace=$NAMESPACE|grep $POD_NAME|awk '{print $1}'| head -1)
+fi
+
+case $COMMAND in
+  attach)
+    kubectl attach --namespace=$NAMESPACE $POD
+    ;;
+  exec)
+    kubectl exec -ti --namespace=$NAMESPACE $POD env COLUMNS=$COLUMNS LINES=$LINES TERM=linux bash
+    ;;
+  logs)
+    kubectl logs --namespace=$NAMESPACE $POD $OPTS
+    ;;
+  pods)
+    kubectl get pods --namespace=$NAMESPACE
+    ;;
+  services)
+    kubectl get services --namespace=$NAMESPACE
+    ;;
+  describe)
+    kubectl describe --namespace=$NAMESPACE $POD
+    ;;
+  pod)
+    echo $POD
+    ;;
+esac
