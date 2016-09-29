@@ -4,8 +4,6 @@ NAMESPACE_NAME=$1
 COMMAND=$2
 POD_NAME=$3
 OPTS="$@[4, -1]"
-
-
 NAMESPACE=$(kubectl get namespaces|grep $NAMESPACE_NAME|awk '{print $1}'| head -1)
 
 if [[ -n $POD_NAME ]]
@@ -34,5 +32,17 @@ case $COMMAND in
     ;;
   pod)
     echo $POD
+    ;;
+  knsmon)
+    OBJECTS='services daemonsets deployments pods replicasets replicationcontrollers'
+    printf "=%.0s" $(seq 1 $((75-${#NAMESPACE})))
+    printf " ${NAMESPACE} ===\n"
+    for OBJECT in $OBJECTS; do
+      printf "=== $OBJECT "
+      printf "=%.0s" $(seq 1 $((75-${#OBJECT})))
+      printf "\n"
+      kubectl --namespace=$NAMESPACE get $OBJECT
+      printf "\n"
+    done
     ;;
 esac
