@@ -35,13 +35,14 @@ case $COMMAND in
     ;;
   knsmon)
     OBJECTS='services daemonsets deployments pods replicasets replicationcontrollers'
-    printf "=%.0s" $(seq 1 $((75-${#NAMESPACE})))
+    COLS=$(($(tput cols)-5))
+    printf "=%.0s" $(seq 1 $(($COLS-${#NAMESPACE})))
     printf " ${NAMESPACE} ===\n"
-    for OBJECT in $OBJECTS; do
+    for OBJECT in ${OBJECTS}; do
       printf "=== $OBJECT "
-      printf "=%.0s" $(seq 1 $((75-${#OBJECT})))
+      printf "=%.0s" $(seq 1 $(($COLS-${#OBJECT})))
       printf "\n"
-      kubectl --namespace=$NAMESPACE get $OBJECT
+      kubectl "--namespace=${NAMESPACE}" get ${OBJECT}
       printf "\n"
     done
     ;;
